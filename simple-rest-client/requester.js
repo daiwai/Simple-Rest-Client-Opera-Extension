@@ -1,3 +1,59 @@
+!function( undefined ) {
+	var oex = opera.extension;
+	var i18nObj = function() {
+		var _m = [],
+			lang = 'en',
+			readyTransactions = [],
+			localizeTransactions = [],
+			initialized = false;
+		function _om ( msg ) {
+			var d = msg.data, 
+				s = [];
+			if(!d || d.action!=='i18n_localized') return;
+			for(var j in d.data) s[j] = _m[j] = d.data[j];
+			if(d.id) localizeTransactions[ d.id ]( d.language, s );
+			if(!initialized) {
+				initialized = true;
+				lang = d.language;
+				for(var i = 0, l = readyTransactions.length; i < l; i++) {
+					readyTransactions[ i ]( lang );
+					readyTransactions = readyTransactions.splice(i, 1);
+				}
+			}
+		}
+		var _l = function( stringData, callback ) {
+			if( !stringData )	{ // no data :(
+				if( callback && typeof callback == 'function' )	callback( '??', stringData );
+				return; 
+			}
+			var id = Math.floor(Math.random()*1e16),
+				cb = (callback && typeof callback == 'function') ? callback : function() {};
+			localizeTransactions[ id ] = cb;
+			oex.postMessage({ "action": 'i18n_localize', "id": id, "messages": stringData });
+		};
+		var _r = function( callback ) {
+			var cb = (callback && typeof callback == 'function') ? callback : function() {};
+			initialized ? callback( lang ) : readyTransactions.push( cb );
+		};
+		var _gm = function( id, replacements ) {
+			if( !_m[ id ]) return id;
+			var s = _m[ id ][ "message" ];
+			if(replacements)
+				for(var i in replacements) s = s.replace('<string/>', replacements[i] );
+			return s;
+		};
+		oex.messages = _m;
+		oex.addEventListener('message', _om, false);
+		oex.postMessage({ "action": 'i18n_load' }); 
+		return {
+			get ready() { return _r; }, 	 // parameters: (callback_function)
+			get localize() { return _l; },   // parameters: (strings, callback_function)
+			get getMessage() { return _gm; } // parameters: (message_id[, replacements])
+		};
+	};
+	if(!oex.i18n) oex.i18n = new i18nObj();
+}();
+
 // Status codes as per rfc2616
 // @see http://tools.ietf.org/html/rfc2616#section-10
 var statusCodes = new Array();
@@ -79,7 +135,7 @@ function sendRequest() {
   if($("#url").val() != "") {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = readResponse;
-    try {
+ //   try {
       xhr.open($("input[type=radio]:checked").val(), $("#url").val(), true);
       var headers = $("#headers").val();
       headers = headers.split("\n");
@@ -93,19 +149,19 @@ function sendRequest() {
       } else {
         xhr.send("");
       }
-    }
-    catch(e){
+//    }
+/*     catch(e){
       console.log(e);
-      $("#responseStatus").html("<span style=\"color:#FF0000\">"+chrome.i18n.getMessage("bad_request")+"</span>");
+      $("#responseStatus").html("<span style=\"color:#FF0000\">"+opera.extension.i18n.getMessage("bad_request")+"</span>");
       $("#respHeaders").css("display", "none");
       $("#respData").css("display", "none");
 
       $("#loader").css("display", "none");
       $("#responsePrint").css("display", "");
-    }
+    } */
   } else {
     console.log("no uri");
-    $("#responseStatus").html("<span style=\"color:#FF0000\">"+chrome.i18n.getMessage("bad_request")+"</span>");
+    $("#responseStatus").html("<span style=\"color:#FF0000\">"+opera.extension.i18n.getMessage("bad_request")+"</span>");
     $("#respHeaders").css("display", "none");
     $("#respData").css("display", "none");
 
@@ -190,11 +246,11 @@ function init() {
 function lang() {
   $('._msg_').each(function () {
     var val = $(this).html();
-    $(this).html(chrome.i18n.getMessage(val));
+    $(this).html(opera.extension.i18n.getMessage(val));
   });
   $('._msg_val_').each(function () {
     var val = $(this).val();
-    $(this).val(chrome.i18n.getMessage(val));
+    $(this).val(opera.extension.i18n.getMessage(val));
   });
 }
 

@@ -1,4 +1,4 @@
-{
+opera.extension.messages = {
   "name": {"message": "Client REST simple"},
   "description": {"message": "Constuisez vos requêtes HTTP pour tester directement vos services web."},
   "request": {"message": "Requête"},
@@ -13,6 +13,6 @@
   "processing": {"message": "En cours"},
   "status": {"message": "Statut:"},
   "bad_request": {"message": "Mauvaise requête"},
-  "source": {"message": "<a href='http://github.com/jeremys/Simple-Rest-Client-Chrome-Extension'>Code source</a> sous licence Apache"},
+  "source": {"message": "<a href='https://github.com/LennartC/Simple-Rest-Client-Opera-Extension'>Code source</a> sous licence Apache"},
   "icon": {"message": "icône par <a href='http://jasonrayner.deviantart.com/art/Internet-Icon-icns-and-png-130014831'>Jason Rayner</a>"}
 }

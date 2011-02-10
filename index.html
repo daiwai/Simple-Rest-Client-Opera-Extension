@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+       window.addEventListener("load", function(){
+        var theButton;
+        var ToolbarUIItemProperties = {
+          title: "Simple REST Client",
+          icon: "icon_32.png",
+        }
+		theButton = opera.contexts.toolbar.createItem(ToolbarUIItemProperties);
+		theButton.addEventListener('click', function(event) {
+			var TabProperties = {
+				url: "simple-rest-client/index.html",
+				focused: true
+			}
+			opera.extension.tabs.create(TabProperties);
+		}, false);
+        opera.contexts.toolbar.addItem(theButton);
+      }, false);
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
+
