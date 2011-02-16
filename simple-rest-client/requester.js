@@ -133,9 +133,10 @@ function clearFields() {
 function sendRequest() {
   clearFields();
   if($("#url").val() != "") {
+    addHistory($("#url").val(), $("#headers").val(), $("input[type=radio]:checked").val());
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = readResponse;
- //   try {
+    try {
       xhr.open($("input[type=radio]:checked").val(), $("#url").val(), true);
       var headers = $("#headers").val();
       headers = headers.split("\n");
@@ -149,8 +150,8 @@ function sendRequest() {
       } else {
         xhr.send("");
       }
-//    }
-/*     catch(e){
+    }
+     catch(e){
       console.log(e);
       $("#responseStatus").html("<span style=\"color:#FF0000\">"+opera.extension.i18n.getMessage("bad_request")+"</span>");
       $("#respHeaders").css("display", "none");
@@ -158,7 +159,7 @@ function sendRequest() {
 
       $("#loader").css("display", "none");
       $("#responsePrint").css("display", "");
-    } */
+    }
   } else {
     console.log("no uri");
     $("#responseStatus").html("<span style=\"color:#FF0000\">"+opera.extension.i18n.getMessage("bad_request")+"</span>");
@@ -194,19 +195,16 @@ function readResponse() {
       $("#responsePrint").css("display", "");
 
       grow('responseHeaders');
+	  prettyPrint();
+   }
+   catch(e) {
+     $("#responseStatus").html("No response.");
+     $("#respHeaders").css("display", "none");
+     $("#respData").css("display", "none");
 
-      $.chili.options.automatic.active = false;
-      $.chili.options.decoration.lineNumbers = false;
-      var $chili = $('#codeData').chili();
-    }
-    catch(e) {
-      $("#responseStatus").html("No response.");
-      $("#respHeaders").css("display", "none");
-      $("#respData").css("display", "none");
-
-      $("#loader").css("display", "none");
-      $("#responsePrint").css("display", "");
-    }
+     $("#loader").css("display", "none");
+     $("#responsePrint").css("display", "");
+   }
   }
 }
 
@@ -241,8 +239,80 @@ function init() {
   $("#reset").click(function() { location.reload(); });
   $(".radio").change(function() { toggleData(); });
   $(".radio").focus(function() { toggleData(); });
+  createTable();
 }
 
+//create table
+function createTable() {
+	var dbSize = 5 * 1024 * 1024; // 5MB
+    restClientDB = openDatabase("SimpleRestClient", "1.0", "Simple REST Client", dbSize);
+    restClientDB.transaction(
+		function (tx) {
+			tx.executeSql(
+				"CREATE TABLE IF NOT EXISTS requests(url TEXT PRIMARY KEY ASC, headers TEXT, method TEXT, postputdata TEXT, timestamp DATETIME)",
+				[],
+				function(tx,r) {
+					tx.executeSql(
+						"DELETE FROM requests WHERE url NOT IN (SELECT url FROM requests ORDER BY timestamp ASC LIMIT 100)"
+					);
+					getHistory(tx,r);
+				},
+				onError
+			);
+		}
+	);
+}
+
+//DB error handling
+onError = function (tx, e) {
+    console.log("Error: " + e.message);
+}
+
+function getHistory(tx, r) {
+	restClientDB.transaction(
+		function (tx) { tx.executeSql(
+			"SELECT url FROM requests order by timestamp",
+			[],
+			function (tx, rs) {
+				var availableTags = new Array();
+				
+				for (var i = 0; i < rs.rows.length; i++) {
+					availableTags.push(rs.rows.item(i).url);
+				}
+				$( "#url" ).autocomplete({
+						source: availableTags,
+						select: autoCompleteSelected
+				});
+			},
+			onError);
+		}
+	);
+}
+
+function autoCompleteSelected(event, ui) {
+	restClientDB.transaction(
+		function (tx) { 
+			tx.executeSql(
+				"SELECT headers, method, postputdata FROM requests WHERE url = ? ORDER BY timestamp DESC",
+				[ui.item.value],
+				function (tx, rs) {
+					$("#headers").val(rs.rows.item(0).headers);
+					$("#postputdata").val(rs.rows.item(0).postputdata);
+					$("input[value="+rs.rows.item(0).method+"]").attr('checked',true);
+					return true;
+				},
+				onError
+			);
+		}
+	);
+}
+
+function addHistory(url, headers, method) {
+	var newdt = new Date();
+	var addedOn = newdt.getFullYear()+"-"+(newdt.getMonth()+1)+"-"+newdt.getDate()+" "+newdt.getHours()+":"+newdt.getMinutes()+":"+newdt.getSeconds();
+	restClientDB.transaction(function (tx) { tx.executeSql("INSERT OR REPLACE INTO requests(url, headers, method, timestamp) VALUES (?,?,?,?)", [url, headers, method, addedOn], getHistory, onError); });
+}
+		
 function lang() {
   $('._msg_').each(function () {
     var val = $(this).html();
@@ -253,6 +323,8 @@ function lang() {
     $(this).val(opera.extension.i18n.getMessage(val));
   });
 }
+
+var restClientDB;
 
 $(document).ready(function() {
   lang();
