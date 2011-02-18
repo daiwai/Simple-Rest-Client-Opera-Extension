@@ -3,11 +3,25 @@ Simple REST Client for Opera
 Simple REST Client is an extension for Opera to help construct custom
 HTTP requests to directly test your web services.
 
-This extension is an Opera version of Jeremy Selier's Chrome extension: 
+CREDITS
+=======
+This extension is based on Jeremy Selier's Chrome extension: 
 https://github.com/jeremys/Simple-Rest-Client-Chrome-Extension
 
+Auto I18N Library by Rich Tibbett:
+https://github.com/richtr/Opera-11-Extensions--Auto-I18N-Library
+
+jQuery UI:
+http://jqueryui.com/
+
+Status icons coming from Wikipedia:
+http://commons.wikimedia.org/wiki/Category:Ambox
+
+Simple REST Client icon by Jason Rayner:
+http://jasonrayner.deviantart.com/art/Internet-Icon-icns-and-png-130014831
+
+LICENSE
+=======
 Simple REST Client for Opera is licensed under the Apache Licence,
 Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html).
 
-This extension is making use of Rich Tibbett's Auto I18N Library:
-https://github.com/richtr/Opera-11-Extensions--Auto-I18N-Library

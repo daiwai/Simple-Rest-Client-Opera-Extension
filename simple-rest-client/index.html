@@ -3,29 +3,22 @@
   <head>
     <meta charset="utf-8"/>
     <title>Simple REST Client</title>
-    <link rel="stylesheet" type="text/css" href="reset.min.css" />
-    <link rel="stylesheet" type="text/css" href="style.css" />
+	<link rel="shortcut icon" type="image/png" href="icon_32.png">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
     <script type="text/javascript" src="jquery.min.js"></script>
-    <script type="text/javascript">
-    //<![CDATA[
-      // Help IE style HTML5. This makes me sad.
-      // See http://remysharp.com/2009/01/07/html5-enabling-script/
-      (function(){if(!/*@cc_on!@*/0)return;var e = "abbr,article,aside,audio,bb,canvas,datagrid,datalist,details,dialog,eventsource,figure,footer,header,mark,menu,meter,nav,output,progress,section,time,video".split(','),i=e.length;while (i--){document.createElement(e[i])}})()
-    //]]>
-    </script>
-	<link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery-ui.css" type="text/css" media="all" /> 
-	<script src="http://jquery-ui.googlecode.com/svn/tags/latest/ui/minified/jquery-ui.min.js" type="text/javascript"></script> 
-	<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.9.custom.css" rel="stylesheet" />	
+	
+	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.8.9.custom.css" />	
+	<script src="jquery-ui-1.8.9.custom.min.js" type="text/javascript"></script> 
 	
 	<link rel="stylesheet" type="text/css" href="prettify/prettify.css" />
     <script type="text/javascript" src="prettify/prettify.js"></script>
 	
-	<script type="text/javascript" src="messages.js"></script>
+	<script type="text/javascript" src="locales/en/messages.js"></script>
 	<script type="text/javascript" src="i18n_lib.js"></script>
-	
     <script type="text/javascript" src="requester.js"></script>
   </head>
-  <body onload="prettyPrint()">
+  <body>
+	<div id="test"></div>
     <header>
       <h1 class="_msg_">name</h1>
     </header>
@@ -49,6 +42,7 @@
           <label for="headers" class="_msg_">headers</label>
           <textarea name="headers" id="headers" tabindex="3" onkeyup="grow('headers');"></textarea>
         </p>
+        </p>
         <p id="data">
           <label for="postputdata" class="_msg_">data</label>
           <textarea name="data" id="postputdata" tabindex="4" onkeyup="grow('postputdata');"></textarea>
@@ -63,30 +57,38 @@
       <fieldset>
         <legend class="_msg_">response</legend>
         <div id="loader" class="_msg_">processing</div>
+		
         <div id="responsePrint">
-          <p id="pstatus">
-            <label class="_msg_">status</label> 
-            <span id="responseStatus">&nbsp;</span>
-          </p>
-          <p id="respHeaders">
-            <label for="responseHeaders" class="_msg_">headers</label> 
-            <textarea name="responseHeaders" id="responseHeaders" tabindex="6" onkeyup="grow('responseHeaders');"></textarea>
-          </p>
-          <p id="debugLinks" style="display: none;">
-            <label for="debugLink" class="_msg_">debuglink</label> 
-	    <a href="" id="debugLink"></a>
-          </p>
-          <div id="respData">
-            <label for="responseData" class="_msg_">data</label>
-            <div name="responseData" id="responseData" contenteditable="true">
-              <pre><code name="codeData" id="codeData" class="prettyprint">&nbsp;</code></pre>
-            </div>
-          </div>
+			<ul id="responseList">
+				<li><a href="#respHeaders" class="_msg_">headers</a></li>
+				<li><a href="#respData" class="_msg_">data</a></li>
+				<li id="lipreview"><a href="#respPreview" class="_msg_">preview</a></li>
+				<li><span id="responseStatus"></span></li>
+				<li>
+					<span id="validations">
+					<span id="invalid_xml"><img src="status_5XX.svg" alt="bad_formed_xml"/> <span class="_msg_">bad_formed_xml</span></span>
+					<span id="valid_xml"><img src="status_2XX.svg" alt="well_formed_xml"/> <span class="_msg_">well_formed_xml</span></span>
+					<span id="invalid_json"><img src="status_5XX.svg" alt="bad_formed_json"/> <span class="_msg_">bad_formed_json</span></span>
+					<span id="valid_json"><img src="status_2XX.svg" alt="well_formed_json"/> <span class="_msg_">well_formed_json</span></span>
+					</span>
+				</li>
+			</ul>
+			<div id="respHeaders">
+				<textarea name="responseHeaders" id="responseHeaders" tabindex="6" onkeyup="grow('responseHeaders');"></textarea>
+			</div>
+			<div id="respData">
+				<div name="responseData" id="responseData" contenteditable="true">
+					<pre><code name="codeData" id="codeData" class="prettyprint">&nbsp;</code></pre>
+				</div>
+			</div>
+			<div id="respPreview">
+				<iframe id="respPreviewFrame" scrolling="no" src="about:blank"></iframe>
+			</div>
         </div>
       </fieldset>
     </section>
     <footer>
-      <p>Copyright &copy; 2010 <a href="http://www.jeremyselier.com">Jeremy Selier</a> - <span class="_msg_">source</span> - <span class="_msg_">icon</span></p>
+      <p><span class="_msg_">source</span> - <span class="_msg_">icon</span></p>
     </footer>
   </body>
   <script text="text/javascript">

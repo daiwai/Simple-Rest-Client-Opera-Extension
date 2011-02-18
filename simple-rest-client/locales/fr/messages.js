@@ -7,6 +7,7 @@ opera.extension.messages = {
   "method": {"message": "Méthode:"},
   "headers": {"message": "En-têtes:"},
   "data": {"message": "Corps:"},
+  "preview": {"message": "Aperçu:"},
   "send": {"message": "Envoyer"},
   "clear": {"message": "Effacer"},
   "response": {"message": "Réponse"},
@@ -14,5 +15,9 @@ opera.extension.messages = {
   "status": {"message": "Statut:"},
   "bad_request": {"message": "Mauvaise requête"},
   "source": {"message": "<a href='https://github.com/LennartC/Simple-Rest-Client-Opera-Extension'>Code source</a> sous licence Apache"},
-  "icon": {"message": "icône par <a href='http://jasonrayner.deviantart.com/art/Internet-Icon-icns-and-png-130014831'>Jason Rayner</a>"}
+  "icon": {"message": "icône par <a href='http://jasonrayner.deviantart.com/art/Internet-Icon-icns-and-png-130014831'>Jason Rayner</a>"},
+  "bad_formed_xml": {"message": "XML mal formé"},
+  "well_formed_xml": {"message": "XML bien formé"},
+  "bad_formed_json": {"message": "JSON mal formé"},
+  "well_formed_json": {"message": "JSON bien formé"}
 }

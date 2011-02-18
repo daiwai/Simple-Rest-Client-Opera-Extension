@@ -106,7 +106,6 @@ statusCodes[505] = 'HTTP Version not supported';
 function grow(id) {
   var textarea = document.getElementById(id);
   var newHeight = textarea.scrollHeight;
-  var currentHeight = textarea.clientHeight;
   if (newHeight == 0 || $("#"+id).val() == "") {
     newHeight = 20;
   }
@@ -114,9 +113,9 @@ function grow(id) {
 }
 
 function clearFields() {
-  $("#response").css("display", "");
-  $("#loader").css("display", "");
-  $("#responsePrint").css("display", "none");
+  $("#response").show();
+  $("#loader").show();
+  $("#responsePrint").hide();
 
   $("#responseStatus").html("");
   $("#responseHeaders").val("");
@@ -126,8 +125,15 @@ function clearFields() {
   $("#headers").height(20);
   $("#postputdata").height(20);
 
-  $("#respHeaders").css("display", "none");
-  $("#respData").css("display", "none");
+  $("#respHeaders").hide();
+  $("#respData").hide();
+  
+  $("#lipreview").hide();
+  $("#validations").hide();
+  $("#valid_xml").hide();
+  $("#invalid_xml").hide();
+  $("#valid_json").hide();
+  $("#invalid_json").hide();
 }
 
 function sendRequest() {
@@ -154,20 +160,20 @@ function sendRequest() {
      catch(e){
       console.log(e);
       $("#responseStatus").html("<span style=\"color:#FF0000\">"+opera.extension.i18n.getMessage("bad_request")+"</span>");
-      $("#respHeaders").css("display", "none");
-      $("#respData").css("display", "none");
+      $("#respHeaders").hide();
+      $("#respData").hide();
 
-      $("#loader").css("display", "none");
-      $("#responsePrint").css("display", "");
+      $("#loader").hide();
+      $("#responsePrint").show();
     }
   } else {
     console.log("no uri");
     $("#responseStatus").html("<span style=\"color:#FF0000\">"+opera.extension.i18n.getMessage("bad_request")+"</span>");
-    $("#respHeaders").css("display", "none");
-    $("#respData").css("display", "none");
+    $("#respHeaders").hide();
+    $("#respData").hide();
 
-    $("#loader").css("display", "none");
-    $("#responsePrint").css("display", "");
+    $("#loader").hide();
+    $("#responsePrint").show();
   }
 }
 
@@ -179,40 +185,124 @@ function readResponse() {
       if(this.status == 0) {
         throw('Status = 0');
       }
-      $("#responseStatus").html(this.status+' '+statusCodes[this.status]);
+
+      $("#responseStatus").html('<img src="status_'+(''+this.status).substring(0, 1)+'XX.svg" alt="'+this.status+'"/> '+this.status+' '+statusCodes[this.status]);
       $("#responseHeaders").val(jQuery.trim(this.getAllResponseHeaders()));
+
       var debugurl = /X-Debug-URL: (.*)/i.exec($("#responseHeaders").val());
       if (debugurl) {
 	  $("#debugLink").attr('href', debugurl[1]).html(debugurl[1]);
-	  $("#debugLinks").css("display", "");
+	  $("#debugLinks").show();
       }
       $("#codeData").html(jQuery.trim(this.responseText).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'));
 
-      $("#respHeaders").css("display", "");
-      $("#respData").css("display", "");
+      $("#respHeaders").show();
+      $("#respData").show();
 
-      $("#loader").css("display", "none");
-      $("#responsePrint").css("display", "");
+      $("#loader").hide();
+      $("#responsePrint").show();
 
-      grow('responseHeaders');
+	  grow('responseHeaders');
+	  $( "#responsePrint" ).tabs();
+	  $( "#responsePrint" ).tabs( "option", "selected", 1 );
 	  prettyPrint();
-   }
-   catch(e) {
-     $("#responseStatus").html("No response.");
-     $("#respHeaders").css("display", "none");
-     $("#respData").css("display", "none");
+	  
+	  if(this.getResponseHeader('Content-Type').match(/(\/|[+]|[-])xml([;]|$)/gi)) {
+		validateXML(this.responseText);
+	  } else if(this.getResponseHeader('Content-Type').match(/(\/|[+]|[-])json([;]|$)/gi)) {
+		validateJSON(this.responseText);
+	  } else if(this.getResponseHeader('Content-Type').match(/(\/|[+]|[-])(x?)html([;]|$)/gi)) {
+		showPreview(this.responseText);
+	  }
 
-     $("#loader").css("display", "none");
-     $("#responsePrint").css("display", "");
-   }
+	  
+
+    }
+    catch(e) {
+      $("#responseStatus").html('<img src="status_5XX.svg"/> No response.');
+      $("#respHeaders").hide();
+      $("#respData").hide();
+
+      $("#loader").hide();
+	  $("#validations").hide();
+      $("#responsePrint").show();
+	  $("#responsePrint").tabs();
+    }
   }
+}
+
+function showPreview(responseText) {
+	$("#lipreview").show();
+	var iframe = document.getElementById('respPreviewFrame');
+	var iframeDoc = iframe.contentDocument;
+	iframeDoc.open();
+	iframeDoc.write(responseText);
+	iframeDoc.close();
+	var links = $("#respPreviewFrame").contents().find("a");
+	
+	//construct window url
+	var wph = window.location.protocol+'//'+window.location.hostname;
+	if (window.location.port) wph += ':'+window.location.port;
+	var wp = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'))
+
+	//construct request url
+	var ua = $("<a href="+$("#url").val()+"/>");
+	var uph = ua.attr('protocol')+'//'+ua.attr('hostname');
+	if (ua.attr('port')) uph += ':'+ua.attr('port');
+	var up = ua.attr('pathname').substring(0, ua.attr('pathname').lastIndexOf('/'));
+	
+	$("#respPreviewFrame").contents().find("*[src]").each(function () {
+			var src = $(this)[0].src;
+			src = src.replace(new RegExp('^'+wph+wp,"gi"),uph+up);
+			src = src.replace(new RegExp('^'+wph,"gi"),uph);
+			$(this)[0].src = src;
+	});
+	
+	$("#respPreviewFrame").contents().find("*[href]").each(function () {
+			var href = $(this)[0].href;
+			href = href.replace(new RegExp('^'+wph+wp,"gi"),uph+up);
+			href = href.replace(new RegExp('^'+wph,"gi"),uph);
+			
+			$(this)[0].href = href;
+			$(this).bind('click', function() {
+				var href = $(this)[0].href;
+				$("#url").val(href);
+				$("#postputdata").val('')
+				$("#data").hide();
+				$("input[value=get]").attr('checked',true);
+				return false;
+			});
+	});
+}
+
+function validateXML(responseText) {
+	if (isWellFormedXML(responseText)) {
+		$("#valid_xml").show();
+		$("#invalid_xml").hide();
+	} else {
+		$("#valid_xml").hide();
+		$("#invalid_xml").show();
+	}
+	$("#validations").show();
+}
+
+function validateJSON(responseText) {
+	try {
+		jQuery.parseJSON(responseText);
+		$("#valid_json").show();
+		$("#invalid_json").hide();
+	} catch (e) {
+		$("#valid_json").hide();
+		$("#invalid_json").show();
+	}
+	$("#validations").show();
 }
 
 function toggleData() {
   if(jQuery.inArray($("input[type=radio]:checked").val(), ["post", "put"]) > -1) {
-    $("#data").css("display", "");
+    $("#data").show();
   } else {
-    $("#data").css("display", "none");
+    $("#data").hide();
   }
 }
 
@@ -221,19 +311,20 @@ function init() {
   $("#headers").width($("#pheaders").width()-80-30);
   $("#postputdata").width($("#data").width()-80-30);
 
-  $("#responseHeaders").width($("#respHeaders").width()-80-30);
-  $("#responseData").width($("#respHeaders").width()-80-30);
+  $("#responseHeaders").width('100%');
+  $("#responseData").width('100%');
 
-  $("#response").css("display", "none");
-  $("#loader").css("display", "");
-  $("#responsePrint").css("display", "none");
-  $("#sep").css("display", "none");
+  $("#response").hide();
+  $("#pvalidation").hide();
+  $("#loader").show();
+  $("#responsePrint").hide();
+  $("#sep").hide();
 
-  $("#data").css("display", "none");
+  $("#data").hide();
 
   $("#responseStatus").html("");
-  $("#respHeaders").css("display", "none");
-  $("#respData").css("display", "none");
+  $("#respHeaders").hide();
+  $("#respData").hide();
 
   $("#submit").click(function() { sendRequest(); return false; });
   $("#reset").click(function() { location.reload(); });
@@ -271,7 +362,7 @@ onError = function (tx, e) {
 function getHistory(tx, r) {
 	restClientDB.transaction(
 		function (tx) { tx.executeSql(
-			"SELECT url FROM requests order by timestamp",
+			"SELECT url FROM requests order by timestamp DESC",
 			[],
 			function (tx, rs) {
 				var availableTags = new Array();
@@ -313,6 +404,18 @@ function addHistory(url, headers, method) {
 	restClientDB.transaction(function (tx) { tx.executeSql("INSERT OR REPLACE INTO requests(url, headers, method, timestamp) VALUES (?,?,?,?)", [url, headers, method, addedOn], getHistory, onError); });
 }
 		
+
+function isWellFormedXML(responseText) {
+	var xmlParser = new DOMParser();
+	var xmlObject = xmlParser.parseFromString(responseText , "text/xml");
+	with (xmlObject.documentElement) {
+		if (tagName=="parseerror" || namespaceURI=="http://www.mozilla.org/newlayout/xml/parsererror.xml") {
+			return false
+		}
+	}
+	return true;
+}
+
 function lang() {
   $('._msg_').each(function () {
     var val = $(this).html();
@@ -325,6 +428,7 @@ function lang() {
 }
 
 var restClientDB;
+var xmlParser;
 
 $(document).ready(function() {
   lang();
