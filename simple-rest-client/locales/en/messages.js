@@ -19,5 +19,9 @@ opera.extension.messages = {
   "bad_formed_xml": {"message": "Bad formed XML"},
   "well_formed_xml": {"message": "Well formed XML"},
   "bad_formed_json": {"message": "Bad formed JSON"},
-  "well_formed_json": {"message": "Well formed JSON"}
+  "well_formed_json": {"message": "Well formed JSON"},
+  "bad_formed_javascript": {"message": "Javascript syntax error"},
+  "well_formed_javascript": {"message": "Javascript syntax OK"},
+  "reformat": {"message": "reformat/reindent output"},
+  "raw": {"message": "Raw data:"}
  }

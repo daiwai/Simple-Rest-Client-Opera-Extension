@@ -1,0 +1,8 @@
+.boolean { font-family: Consolas; color: blue; }
+.string { font-family: Consolas; color: #008800; font-family: Consolas; }
+.number { font-family: Consolas; color: black; }
+.null { font-family: Consolas; color: red; }
+.key { font-family: Consolas; color: #000088; }
+.sub-items { font-family: Consolas; margin-left: 20px }
+.toggle-btn { font-family: Consolas; cursor: pointer; font: bold; margin-right: 10px; margin-left: -18px; }
+.ellipsis { font-family: Consolas; border: gray 1px solid; background: #d3d3d3 }

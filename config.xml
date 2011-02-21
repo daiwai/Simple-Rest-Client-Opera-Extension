@@ -3,6 +3,6 @@
 	<name>Simple REST Client</name>
 	<description>Construct custom HTTP requests to directly test your web services.</description>
   	<author href="https://github.com/LennartC/" email="coopmans@lacerta.be">Lennart Coopmans</author>
-  	<icon src="icon.png"/>
+  	<icon src="icon_64.png"/>
     <access origin="*" subdomains="true"/>
 </widget>

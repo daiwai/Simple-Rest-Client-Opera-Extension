@@ -8,13 +8,24 @@
     <script type="text/javascript" src="jquery.min.js"></script>
 	
 	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.8.9.custom.css" />	
-	<script src="jquery-ui-1.8.9.custom.min.js" type="text/javascript"></script> 
+	<script type="text/javascript" src="jquery-ui-1.8.9.custom.min.js" ></script> 
+	
+	<link rel="stylesheet" type="text/css" href="css/jquery-jsonviewer.css" />	
+	<script type="text/javascript" src="jquery-jsonviewer.js" ></script> 
+	
+	<link rel="stylesheet" type="text/css" href="css/jquery-xmlviewer.css" />	
+	<script type="text/javascript" src="jquery-xmlviewer.js" ></script> 
+	
+	<script type="text/javascript" src="jquery-fasthtml.js" ></script> 
 	
 	<link rel="stylesheet" type="text/css" href="prettify/prettify.css" />
     <script type="text/javascript" src="prettify/prettify.js"></script>
 	
 	<script type="text/javascript" src="locales/en/messages.js"></script>
 	<script type="text/javascript" src="i18n_lib.js"></script>
+
+    <script type="text/javascript" src="beautify/beautify.js"></script>
+    <script type="text/javascript" src="beautify/beautify-html.js"></script>
     <script type="text/javascript" src="requester.js"></script>
   </head>
   <body>
@@ -47,8 +58,9 @@
           <label for="postputdata" class="_msg_">data</label>
           <textarea name="data" id="postputdata" tabindex="4" onkeyup="grow('postputdata');"></textarea>
         </p>
-        <p>
-          <input class="_msg_val_" type="button" value="send" id="submit" tabindex="5"> <input class="_msg_val_" type="button" value="clear" id="reset"> 
+        <p id="buttons">
+          <input class="_msg_val_" type="button" value="send" id="submit" tabindex="5">
+		  <input class="_msg_val_" type="button" value="clear" id="reset">
         </p>
       </fieldset>
     </section>
@@ -60,30 +72,40 @@
 		
         <div id="responsePrint">
 			<ul id="responseList">
-				<li><a href="#respHeaders" class="_msg_">headers</a></li>
-				<li><a href="#respData" class="_msg_">data</a></li>
-				<li id="lipreview"><a href="#respPreview" class="_msg_">preview</a></li>
-				<li><span id="responseStatus"></span></li>
-				<li>
-					<span id="validations">
-					<span id="invalid_xml"><img src="status_5XX.svg" alt="bad_formed_xml"/> <span class="_msg_">bad_formed_xml</span></span>
-					<span id="valid_xml"><img src="status_2XX.svg" alt="well_formed_xml"/> <span class="_msg_">well_formed_xml</span></span>
-					<span id="invalid_json"><img src="status_5XX.svg" alt="bad_formed_json"/> <span class="_msg_">bad_formed_json</span></span>
-					<span id="valid_json"><img src="status_2XX.svg" alt="well_formed_json"/> <span class="_msg_">well_formed_json</span></span>
-					</span>
+				<li id="liRespHeaders"><a href="#respHeaders" class="_msg_">headers</a></li>
+				<li id="liRespData"><a href="#respData" class="_msg_">data</a></li>
+				<li id="liRespRaw"><a href="#respRaw" class="_msg_">raw<a></li>
+				<li id="liRespPreview"><a href="#respPreview" class="_msg_">preview</a></li>
+				<li id="responseStatus"></li>
+				<li id="validations">
+					<div id="invalid_xml"><img src="status_5XX.svg" alt="bad_formed_xml"/> <span class="_msg_">bad_formed_xml</span></div>
+					<div id="valid_xml"><img src="status_2XX.svg" alt="well_formed_xml"/> <span class="_msg_">well_formed_xml</span></div>
+					<div id="invalid_json"><img src="status_5XX.svg" alt="bad_formed_json"/> <span class="_msg_">bad_formed_json</span></div>
+					<div id="valid_json"><img src="status_2XX.svg" alt="well_formed_json"/> <span class="_msg_">well_formed_json</span></div>
+					<div id="invalid_javascript"><img src="status_5XX.svg" alt="bad_formed_javascript"/> <span class="_msg_">bad_formed_javascript</span></div>
+					<div id="valid_javascript"><img src="status_2XX.svg" alt="well_formed_javascript"/> <span class="_msg_">well_formed_javascript</span></div>
 				</li>
 			</ul>
+			<div id="respData"></div>
+			
+			<!--div class="panes">
 			<div id="respHeaders">
-				<textarea name="responseHeaders" id="responseHeaders" tabindex="6" onkeyup="grow('responseHeaders');"></textarea>
-			</div>
-			<div id="respData">
-				<div name="responseData" id="responseData" contenteditable="true">
-					<pre><code name="codeData" id="codeData" class="prettyprint">&nbsp;</code></pre>
+				<div name="respHeadersEdit" id="respHeadersEdit" class="responseData" contenteditable="true">
+					<pre><code name="responseHeaders" id="responseHeaders">&nbsp;</code></pre>
 				</div>
 			</div>
-			<div id="respPreview">
-				<iframe id="respPreviewFrame" scrolling="no" src="about:blank"></iframe>
+			<div id="respData">
+				<div name="responseData" id="responseData" class="responseData"></div>
 			</div>
+			<div id="respRaw">
+				<a href="#" class="_msg_" onclick="fixIndentation(); return false;">reformat</a><br/><br/>
+				<div name="responseRaw" id="responseRaw" class="responseData">
+					<pre contenteditable="true"><code name="codeRaw" id="codeRaw" class="prettyprint">&nbsp;</code></pre>
+				</div>
+			</div>
+			<div id="respPreview"  class="prettyprint">
+			</div>
+			</div-->
         </div>
       </fieldset>
     </section>
