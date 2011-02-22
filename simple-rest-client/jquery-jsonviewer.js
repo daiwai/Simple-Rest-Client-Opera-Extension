@@ -26,6 +26,19 @@
 		parseVar(this[0], json, true);
 	}
 	
+	function hasClass(ele,cls) {
+		return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+	}
+	function addClass(ele,cls) {
+		if (!hasClass(ele,cls)) ele.className += " "+cls;
+	}
+	function removeClass(ele,cls) {
+		if (hasClass(ele,cls)) {
+			var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+			ele.className=ele.className.replace(reg,' ');
+		}
+	}
+	
     /**
      *
      * @param regionId id of region. All collapsible regions are numbered beginning with 0
@@ -34,8 +47,10 @@
     function toggle(regionId, collapse) {
         var button = document.getElementById('btn' + regionId);
         if (!isSet(button)) return;
-        if (!isSet(collapse)) collapse = button.innerText == '-';
-        button.innerText = collapse ? '+' : '-';
+        if (!isSet(collapse)) collapse = hasClass(button, 'toggle-btn-min');
+		removeClass(button, (collapse ? 'toggle-btn-min' : 'toggle-btn-plus'));
+		addClass(button, (collapse ? 'toggle-btn-plus' : 'toggle-btn-min'));
+        //button.innerText = collapse ? '+' : '-';
         var region = document.getElementById('region' + regionId);
         region.style.display = collapse ? 'none' : '';
         var ellipsis = document.getElementById('ellipsis' + regionId);
@@ -93,8 +108,8 @@
     function addToggleBtn(parent) {
         var btn = addTag(parent, {
             id: 'btn' + idCounter,
-            text: '-',
-            cls: 'toggle-btn'
+            html: '&nbsp;',
+            cls: 'toggle-btn toggle-btn-min'
         });
         var id = idCounter;
         btn.onclick = function() {
@@ -141,7 +156,10 @@
 				node = addTag(list, { tag: 'div' });
 			}
             if (collapsible) addToggleBtn(node);
-            addTag(node, { text: key + ': ', cls: 'key' });
+            addTag(node, { text: '"', cls: 'hide-but-copy' });
+            addTag(node, { text: key, cls: 'key' });
+            addTag(node, { text: '"', cls: 'hide-but-copy' });
+            addTag(node, { text: ': ', cls: 'key' });
             parseVar(node, value, !collapsible);
             if (++i < mapSize) addText(node, ',');
         }
@@ -163,7 +181,9 @@
         var r3 = /^(www|ftp)(\.\w+){2,}/i;
         var r4 = /^[\w.]+\?[\w.]+=/i;
         if (r1.test(value) || r2.test(value) || r3.test(value) || r4.test(value)) {
+            addTag(parent, { text: '"', cls: 'hide-but-copy' });
             addTag(parent, { tag: 'a', text: value, href: value, target: 'blank' });
+            addTag(parent, { text: '"', cls: 'hide-but-copy' });
         } else {
             addTag(parent, { text: '"' + value + '"', cls: 'string' });
         }

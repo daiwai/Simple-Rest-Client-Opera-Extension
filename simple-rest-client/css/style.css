@@ -113,6 +113,7 @@ textarea {
 }
 #loader {
  background: url(images/loader.gif) no-repeat center 5px;
+ background-size: 40px;
  height: 30px;
  padding-top: 50px;
  text-align: center;

@@ -148,7 +148,7 @@
 		var TagEmptyElement = document.createElement('div');
 		TagEmptyElement.className = 'Element';
 		TagEmptyElement.style.position = 'relative';
-		TagEmptyElement.style.left = NestingIndent+'px';
+		//TagEmptyElement.style.left = NestingIndent+'px';
 		if (RootNode.childNodes.length==0) { 
 		var ClickableElement = AddTextNode(TagEmptyElement,'','Clickable') ;
 		ClickableElement.id = 'div_empty_' + IDCounter;	  
@@ -166,7 +166,7 @@
 		}
 		else { // mo child nodes
 		
-		var ClickableElement = AddTextNode(TagEmptyElement,'+','Clickable') ;
+		var ClickableElement = AddHtmlNode(TagEmptyElement,'&nbsp;','Clickable Clickable-plus') ;
 		ClickableElement.onclick  = function() {ToggleElementVisibility(this); }
 		ClickableElement.id = 'div_empty_' + IDCounter;	
 			
@@ -195,8 +195,8 @@
 		var TagElement = document.createElement('div');
 		TagElement.className = 'Element';
 		TagElement.style.position = 'relative';
-		TagElement.style.left = NestingIndent+'px';
-		ClickableElement = AddTextNode(TagElement,'-','Clickable') ;
+		//TagElement.style.left = NestingIndent+'px';
+		ClickableElement = AddHtmlNode(TagElement,'&nbsp;','Clickable Clickable-min') ;
 		ClickableElement.onclick  = function() {ToggleElementVisibility(this); }
 		ClickableElement.id = 'div_content_' + IDCounter;		
 		++IDCounter;
@@ -244,6 +244,14 @@
 		NewNode = document.createElement('span');
 		if (Class) {  NewNode.className  = Class;}
 		if (Text) { NewNode.appendChild(document.createTextNode(Text)); }
+		if (ParentNode) { ParentNode.appendChild(NewNode); }
+		return NewNode;		
+	}
+	function AddHtmlNode(ParentNode,Html,Class) 
+	{
+		NewNode = document.createElement('span');
+		if (Class) {  NewNode.className  = Class;}
+		if (Html) { NewNode.innerHTML = Html; }
 		if (ParentNode) { ParentNode.appendChild(NewNode); }
 		return NewNode;		
 	}

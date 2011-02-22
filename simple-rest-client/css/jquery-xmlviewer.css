@@ -1,33 +1,87 @@
 @charset "utf-8";
 .Utility { 
-color: #000088;
-font-family: Consolas;
+color: #227799;
+font-family: monospace;
 }
 .NodeName { 
-color: #000088;
-font-family: Consolas;
+color: #227799;
+font-family: monospace;
 }
 .AttributeName { 
-color: #660066;
-font-family: Consolas;
+color: #222299;
+font-family: monospace;
 }
 .AttributeValue { 
-color: #008800;
-font-family: Consolas;
+color: #774422;
+font-family: monospace;
 }
 .NodeValue { 
 color: #000000;
-font-family: Consolas;
+font-family: monospace;
 }
 .Element { 
 border-left: 1px dotted #bbb;
 padding-top: 0px;
-font-family: Consolas;
+font-family: monospace;
+margin-left: 23px;
+padding-left: 7px;
 }
 .Clickable { 
 	cursor: pointer;
 	vertical-align: middle;
-	margin-left: -10px;
-	padding-right: 2px;
-font-family: Consolas;
+	margin-left: -15px;
+	padding-right: 4px;
+	font-family: monospace;
+	display: inline-block;
+	width: 11px;
 }
+.Clickable-min { background: url(images/min.png) no-repeat center; }
+.Clickable-plus { background: url(images/plus.png) no-repeat center;}
+
+/**
+
+.dom div { 
+font-family: monospace;
+color: #111111;
+}
+#target-element { 
+background-color: #eeeecc;
+margin-top: -1px;
+margin-right: -1px;
+margin-bottom: -1px;
+border: 1px solid #b8b87a;
+position: relative;
+z-index: 1;
+}
+.dom [handler="spotlight-node"]:hover { 
+background-color: #f5f5e0;
+}
+.dom .comment { 
+color: #888888;
+}
+.dom node, selector { 
+color: #227799;
+}
+.dom key, .stylesheets key, .css-inspector key { 
+color: #222299;
+}
+.dom value, .doctype-value, .stylesheets value, .css-inspector value { 
+color: #774422;
+}
+.dom .text-node, .dom .comment-node, .dom .cdata-node { 
+color: #abbaba;
+}
+.dom .document-node { 
+color: #294556;
+}
+.dom .document-node { 
+color: #294556;
+}
+.dom .doctype { 
+color: #1a5c75;
+}
+.dom doctype-attrs { 
+color: #1a1a75;
+}
+
+**/

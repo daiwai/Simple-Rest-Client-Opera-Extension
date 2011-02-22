@@ -117,16 +117,13 @@ function clearFields() {
   response = null;
   $("#response").show();
   $("#loader").show();
-  $("#responsePrint").hide();
 
-  $("#responseStatus").html("");
-  $("#responseHeaders").html("");
-  $("#responseData").text("");
+  $("#respData").fasthtml("");
 
   $("#headers").height(20);
   $("#postputdata").height(20);
 
-  $("#respHeaders").hide();
+  $("#responsePrint").hide();
   $("#respData").hide();
   $('#responseList li').hide();
   $("#validations").hide();
@@ -182,7 +179,7 @@ function readResponse() {
   grow('headers');
   grow('postputdata');
   if (this.readyState == 4) {
-   // try {
+   try {
       if(this.status == 0) {
         throw('Status = 0');
       }
@@ -203,14 +200,16 @@ function readResponse() {
 	  $("#liRespHeaders").show();
 	  $("#liRespRaw").show();
 	  
-	  if(expectXML(contentType)) {
-		validateXML(this.responseText);
-	  } else if(expectJSON(contentType)) {
-		validateJSON(this.responseText);
-	  } else if(expectJavascript(contentType)) {
-		validateJavascript(this.responseText);
-	  } else if(expectHTML(contentType)) {
-		 $("#liRespPreview").show();
+	  if (!useBasicView(this.responseText.length)) {
+		  if(expectXML(contentType)) {
+			validateXML(this.responseText);
+		  } else if(expectJSON(contentType)) {
+			validateJSON(this.responseText);
+		  } else if(expectJavascript(contentType)) {
+			validateJavascript(this.responseText);
+		  } else if(expectHTML(contentType)) {
+			 $("#liRespPreview").show();
+		  }
 	  }
 
       $("#loader").hide();
@@ -222,20 +221,23 @@ function readResponse() {
 		selectTab( $("#liRespRaw") );
 	  }
 	  
-    // }
-    // catch(e) {
-      // $("#responseStatus").html('<img src="status_5XX.svg"/> No response.');
+    }
+    catch(e) {
+	  console.log(e.message);
+      $("#responseStatus").html('<img src="status_5XX.svg"/> No response.');
 	  
-	  // $("#responseStatus").show();
-      // $("#respHeaders").hide();
-      // $("#respData").hide();
+	  $("#responseStatus").show();
+      $("#respData").hide();
 
-      // $("#loader").hide();
-	  // $("#validations").hide();
-      // $("#responsePrint").show();
-	  // $("#responsePrint").tabs();
-    // }
+      $("#loader").hide();
+	  $("#validations").hide();
+      $("#responsePrint").show();
+    }
   }
+}
+
+function useBasicView(size) {
+	return (size > widget.preferences.responsesize);
 }
 
 function expectJSON(contentType) {
@@ -292,8 +294,11 @@ function validateJSON(responseText) {
 	$("#validations").show();
 }
 
-function validateJavascript(responseText) {	
-	if (isValidJavascript(responseText)) {
+function validateJavascript(responseText) {
+	if (isValidJSON(responseText)) {
+		$("#valid_json").show();
+		$("#liRespData").show();
+	} else if (isValidJavascript(responseText)) {
 		$("#valid_javascript").show();
 	} else {
 		$("#invalid_javascript").show();
@@ -305,6 +310,7 @@ function isValidJSON(responseText) {
 	try {
 		jQuery.parseJSON(responseText);
 	} catch (e) {
+		console.log(e.message);
 		return false;
 	}
 	return true;
@@ -365,7 +371,9 @@ function showData() {
 	$("#respData").fasthtml('<div name="responseData" id="responseData" class="responseData"></div>');
 	if(expectXML(response.getResponseHeader('Content-Type'))) {
 		$("#responseData").xmlviewer(response.responseText);
-	} else if(expectJSON(response.getResponseHeader('Content-Type'))) {
+	} else if(
+		expectJSON(response.getResponseHeader('Content-Type')) ||
+		(expectJavascript(response.getResponseHeader('Content-Type')) && isValidJSON(response.responseText))) {
 		$("#responseData").jsonviewer(response.responseText);
 	} else {
 		showRawData();
@@ -384,7 +392,7 @@ function showRawData() {
 	data += '</code></pre>';
 	data += '</div>';
 	$('#responseData').html(data);
-	prettyPrint();
+	if (!useBasicView(response.responseText.length)) prettyPrint();
 }
 
 function showPreview() {
@@ -482,6 +490,9 @@ function init() {
   $("#reset").click(function() { location.reload(); });
   $(".radio").change(function() { toggleData(); });
   $(".radio").focus(function() { toggleData(); });
+  if (widget.preferences.responsesize === undefined) {
+	widget.preferences.responsesize = 300000;
+  }
   createTable();
 }
 
