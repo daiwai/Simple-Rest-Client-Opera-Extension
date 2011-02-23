@@ -23,5 +23,6 @@ opera.extension.messages = {
   "bad_formed_javascript": {"message": "Javascript syntax error"},
   "well_formed_javascript": {"message": "Javascript syntax OK"},
   "reformat": {"message": "reformat/reindent output"},
-  "raw": {"message": "Raw data:"}
+  "raw": {"message": "Raw data:"},
+  "preferences": {"message": "Preferences" }
  }
