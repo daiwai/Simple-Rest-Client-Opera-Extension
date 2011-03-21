@@ -22,7 +22,7 @@
 	$.fn.jsonviewer = function(jsonStr) {
 		addUi(this[0]);
 		jsonStr = trim(jsonStr);
-		var json = eval('(' + jsonStr + ')');
+		var json = JSON.parse(jsonStr);
 		parseVar(this[0], json, true);
 	}
 	
@@ -176,6 +176,8 @@
     }
 
     function parseString(parent, value) {
+	value = JSON.stringify(value);
+	value = value.substring(1,value.length-1);
         var r1 = /^(https?|ftps?|mailto|callto):\S+$/i;  // address starting with protocol without spaces
         var r2 = /^(\\\\|\/\/|\w:\\)/i;  // windows/unix remote paths
         var r3 = /^(www|ftp)(\.\w+){2,}/i;
