@@ -15,6 +15,7 @@ cp -R ../simple-rest-client ../build/
 cp -R ../config.xml ../build/
 cp -R ../index.html ../build/
 cp -R ../options.html  ../build/
+cp -R ../options.css ../build/
 cp -R ../icon_*.png ../build/
 
 miniJS="jquery-fasthtml.js jquery-jsonviewer.js jquery-xmlviewer.js requester.js beautify/beautify.js beautify/beautify-html.js"

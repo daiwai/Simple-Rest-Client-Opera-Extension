@@ -29,13 +29,12 @@
     <script type="text/javascript" src="requester.js"></script>
   </head>
   <body>
-	<div id="test"></div>
-    <header>
-      <h1 class="_msg_">name</h1>
-    </header>
+	<!-- styling hack -->
+	<img src="css/images/icon-bg.png" style="position: absolute; top: 0px; right: 0px; opacity: .3"/>
+	
     <section id="request">
       <fieldset>
-        <legend class="_msg_">request</legend>  
+         <h1 class="_msg_">name</h1>
         <p id="purl">
           <label for="url" class="_msg_">url</label> 
           <input type="text" name="url" id="url" tabindex="1">
@@ -67,7 +66,6 @@
     <hr id="sep" />
     <section id="response">
       <fieldset>
-        <legend class="_msg_">response</legend>
         <div id="loader" class="_msg_">processing</div>
 		
         <div id="responsePrint">

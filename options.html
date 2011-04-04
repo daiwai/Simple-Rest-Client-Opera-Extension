@@ -1,40 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>Simple REST Client - options</title>
-	<link rel="shortcut icon" type="image/png" href="icon_32.png">
-	<script type="text/javascript" src="simple-rest-client/jquery.min.js"></script>
-
-	<style>
-		body { padding: 25px 0; text-align: center; font: bold .75em "Helvetica Neue", arial, sans-serif; background-color: #f8f8f8; }
-		body > * { display: inline-block; text-align: left; }
-		#optionpane {
-			width: 400px;
-			color: #e7eaea;
-			margin: 32px 16px;
-			padding: 20px 40px;
-			background: rgba(0,0,0,.7);
-			border-radius: 18px;
-			box-shadow: 
-				inset -3px -3px 1px rgba(0,0,0,.33),
-				inset 0 10px 25px rgba(255,255,255,.66),
-				0 1px 10px rgba(0,0,0,.5);
-			text-shadow: 0 1px 1px rgba(255,255,255,.25);
-		}
-		#optionpane a { color: #e7eaea; }
-		#optionpane h1 { font-size: 1.3em; }
-		#optionpane ul { padding: 0; }
-		#optionpane #title { text-align: center; vertical-align: top; font-size: 2em; text-shadow: 0 4px 4px rgba(0,0,0,.9); }
-		#optionpane #title img { vertical-align: middle; padding-right: 4px; }
-		
-		#responsesizeValue { display: inline-block; text-align: left; width: 150px; }
-		#title a { text-decoration: none; border-width: 0; }
-		#options { padding: 10px 0; }
-		#copyright { width: 100%; text-align: center; font-size: .5em; padding-top: 10px; }
-		.note { font-size: .5em; }
-	</style>
-	<script text="text/javascript">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="options.css">
+  <title id="widget-title">Opera Extensions | Simpe REST Client</title>
+  <script src="simple-rest-client/jquery.min.js" type="text/javascript"></script>
+  <script text="text/javascript">
 		var min = 0;
 		var max = 400000;
 		if (widget.preferences.responsesize === undefined) {
@@ -60,43 +31,52 @@
 	</script>
 </head>
 <body>
-	<div id="optionpane">
-		<div id="title"><a href="https://github.com/LennartC/Simple-Rest-Client-Opera-Extension"><img src="icon_64.png"/>Simple REST Client</a></div>
-		<div id="options"><h1>Options</h1>
-			<ul>
-				<li>
-				Switch to basic view when response larger than:<br/>
-				<input id="responsesize" type="range" min="0" max="400000" /><span id="responsesizeValue"></span>
-				<p class="note">
-				Basic view disables content parsing, validations and syntax highlighting and increases performance.
-				</p>
-				</li>
-			</ul>
-		</div>
-		<div id="features"><h1>Features</h1>
-			<ul>
-				<li>Construct custom HTTP requests to directly test your web services.</li>
-				<li>Validates XML (well-formedness), JSON and Javascript.</li>
-				<li>Formats and highlights JSON data (JsonViewer by s-a-s-h)</li>
-				<li>Formats and highlights XML data (XMLDisplay by Lev Muchnik)</li>
-				<li>Preview HTML</li>
-			</ul>
-		</div>
-		<div id="credits"><h1>Credits</h1>
-			<ul>
-				<li>This extension is based on <a href="https://github.com/jeremys/Simple-Rest-Client-Chrome-Extension">Jeremy Selier's Chrome extension</a>.</li>
-				<li><a href="https://github.com/richtr/Opera-11-Extensions--Auto-I18N-Library">Auto I18N Library</a> by Rich Tibbett.</li>
-				<li>Status icons coming from <a href="http://commons.wikimedia.org/wiki/Category:Ambox">Wikipedia</a>.</li>
-				<li><a href="http://jasonrayner.deviantart.com/art/Internet-Icon-icns-and-png-130014831">Simple REST Client icon</a> by Jason Rayner.</li>
-				<li><a href="https://addons.opera.com/addons/extensions/details/jsonviewer/1.2/">JSON Viewer</a> by s-a-s-h.</li>
-				<li><a href="http://www.levmuchnik.net/Content/ProgrammingTips/WEB/XMLDisplay/DisplayXMLFileWithJavascript.html">XMLDisplay</a> by Lev Muchnik.</li>
-				<li><a href="http://jsbeautifier.org/">jsbeautifier</a> by Einar Lielmanis.</li>
-			</ul>
-		</div>
-		<div id="copyright">
-			2011 &copy; Lennart Coopmans<br/>
-			Licensed under the Apache License, Version 2.0
-		</div>
-	</div>
+  <header>
+    <img src="icon_64.png">
+    <h1 id="widget-name">Simple REST Client v1.3</h1>
+    <h2>Made by <span id="widget-author">Lennart Coopmans</h2>
+  </header>
+	
+	
+  <section>
+	<h3>Options:</h3>
+	<fieldset>
+		Switch to basic view when response larger than:<br/>
+		<input id="responsesize" type="range" min="0" max="400000" /><span id="responsesizeValue"></span>
+		<p class="note">
+		Basic view disables content parsing, validations and syntax highlighting and increases performance.
+		</p>
+    </fieldset>
+	
+	
+	<h3>Features:</h3>
+	<fieldset>
+		<ul>
+			<li>Construct custom HTTP requests to directly test your web services.</li>
+			<li>Validates XML (well-formedness), JSON and Javascript.</li>
+			<li>Formats and highlights JSON data (JsonViewer by s-a-s-h)</li>
+			<li>Formats and highlights XML data (XMLDisplay by Lev Muchnik)</li>
+			<li>Preview HTML</li>
+		</ul>
+	</fieldset>	
+	
+	<h3>Credits:</h3>
+	<fieldset>
+		<ul>
+			<li>This extension is based on <a href="https://github.com/jeremys/Simple-Rest-Client-Chrome-Extension">Jeremy Selier's Chrome extension</a>.</li>
+			<li><a href="https://github.com/richtr/Opera-11-Extensions--Auto-I18N-Library">Auto I18N Library</a> by Rich Tibbett.</li>
+			<li>Status icons coming from <a href="http://commons.wikimedia.org/wiki/Category:Ambox">Wikipedia</a>.</li>
+			<li><a href="http://jasonrayner.deviantart.com/art/Internet-Icon-icns-and-png-130014831">Simple REST Client icon</a> by Jason Rayner.</li>
+			<li><a href="https://addons.opera.com/addons/extensions/details/jsonviewer/1.2/">JSON Viewer</a> by s-a-s-h.</li>
+			<li><a href="http://www.levmuchnik.net/Content/ProgrammingTips/WEB/XMLDisplay/DisplayXMLFileWithJavascript.html">XMLDisplay</a> by Lev Muchnik.</li>
+			<li><a href="http://jsbeautifier.org/">jsbeautifier</a> by Einar Lielmanis.</li>
+		</ul>
+	</fieldset>
+	
+	<footer>
+	<p>2011 &copy; Lennart Coopmans - <a href="https://github.com/LennartC/Simple-Rest-Client-Opera-Extension">source code</a>
+	<br/>
+	Licensed under the Apache License, Version 2.0</p>
+	</footer>
 </body>
 </html>
