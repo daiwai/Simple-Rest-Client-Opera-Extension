@@ -26,6 +26,8 @@
 
     <script type="text/javascript" src="beautify/beautify.js"></script>
     <script type="text/javascript" src="beautify/beautify-html.js"></script>
+    <script type="text/javascript" src="jquery.autogrow-textarea.js"></script>
+	
     <script type="text/javascript" src="requester.js"></script>
   </head>
   <body>
@@ -50,12 +52,12 @@
         </p>
         <p id="pheaders">
           <label for="headers" class="_msg_">headers</label>
-          <textarea name="headers" id="headers" tabindex="3" onkeyup="grow('headers');"></textarea>
+          <textarea name="headers" id="headers" tabindex="3"></textarea>
         </p>
         </p>
         <p id="data">
           <label for="postputdata" class="_msg_">data</label>
-          <textarea name="data" id="postputdata" tabindex="4" onkeyup="grow('postputdata');"></textarea>
+          <textarea name="data" id="postputdata" tabindex="4"></textarea>
         </p>
         <p id="buttons">
           <input class="_msg_val_" type="button" value="send" id="submit" tabindex="5">

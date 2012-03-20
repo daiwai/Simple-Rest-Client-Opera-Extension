@@ -103,25 +103,12 @@ statusCodes[503] = 'Service Unavailable';
 statusCodes[504] = 'Gateway Time-out';
 statusCodes[505] = 'HTTP Version not supported';
 
-function grow(id, extra) {
-  var textarea = document.getElementById(id);
-  var newHeight = textarea.scrollHeight;
-  if (newHeight == 0 || $("#"+id).val() == "") {
-    newHeight = 20;
-  }
-  if (extra) newHeight += extra;
-  textarea.style.height = newHeight + 'px';
-}
-
 function clearFields() {
   response = null;
   $("#response").show();
   $("#loader").show();
 
   $("#respData").fasthtml("");
-
-  $("#headers").height(20);
-  $("#postputdata").height(20);
 
   $("#responsePrint").hide();
   $("#respData").hide();
@@ -145,7 +132,7 @@ function sendRequest() {
         if (header[1])
             xhr.setRequestHeader(header[0],header[1]);
       }
-      if(jQuery.inArray($("input[type=radio]:checked").val(), ["post", "put"]) > -1) {
+      if(jQuery.inArray($("#methods input[type=radio]:checked").val(), ["post", "put"]) > -1) {
         xhr.send($("#postputdata").val());
       } else {
         xhr.send("");
@@ -176,8 +163,6 @@ var response;
 
 function readResponse() {
   response = this;
-  grow('headers');
-  grow('postputdata');
   if (this.readyState == 4) {
    try {
       if(this.status == 0) {
@@ -331,8 +316,8 @@ function isValidJavascript(responseText) {
 	}
 }
 
-function toggleData() {
-  if(jQuery.inArray($("input[type=radio]:checked").val(), ["post", "put"]) > -1) {
+function toggleData(event) {
+  if(jQuery.inArray(event.srcElement.value, ["post", "put"]) > -1) {
     $("#data").show();
   } else {
     $("#data").hide();
@@ -488,12 +473,14 @@ function init() {
 
   $("#submit").click(function() { sendRequest(); return false; });
   $("#reset").click(function() { location.reload(); });
-  $(".radio").change(function() { toggleData(); });
-  $(".radio").focus(function() { toggleData(); });
+  $("#methods .radio").change(function() { toggleData(event); });
+//  $("#methods .radio").focus(function() { toggleData(); });
   if (widget.preferences.responsesize === undefined) {
 	widget.preferences.responsesize = 300000;
   }
   createTable();
+
+  $('textarea').autogrow();
 }
 
 //create table

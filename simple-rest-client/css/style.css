@@ -130,7 +130,7 @@ input[type=text], textarea {
  white-space:nowrap;
 }
 textarea {
- height: 100px;
+ height: 40px;
 }
 #loader {
  background: url(images/loader.gif) no-repeat center 5px;
